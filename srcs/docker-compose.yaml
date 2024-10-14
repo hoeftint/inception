@@ -1,0 +1,25 @@
+services:
+  nginx:
+    image: nginx:1
+    container_name: nginx
+    build: srcs/requirements/nginx/Dockerfile
+    ports: 
+      - "8080:443"
+    restart: unless-stopped
+    networks:
+      - inception
+    secrets:
+      - key
+      - cert
+
+networks:
+  inception:
+    name: inception
+
+secrets:
+  cert:
+    file: ../secrets/nginx.crt
+  key:
+    file: ../secrets/nginx.key
+
+
