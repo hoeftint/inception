@@ -1,6 +1,5 @@
 services:
   nginx:
-    image: nginx:1
     container_name: nginx
     build: srcs/requirements/nginx/Dockerfile
     ports: 
@@ -12,6 +11,9 @@ services:
       - key
       - cert
 
+  wordpress:
+    container_name: wordpress
+
 networks:
   inception:
     name: inception
@@ -21,5 +23,9 @@ secrets:
     file: ../secrets/nginx.crt
   key:
     file: ../secrets/nginx.key
+
+volumes:
+  wordpress:
+    
 
 
