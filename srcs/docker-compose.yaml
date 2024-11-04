@@ -1,18 +1,17 @@
 services:
   nginx:
     container_name: nginx
-    build: srcs/requirements/nginx/Dockerfile
+    build:
+        context: requirements/nginx
+        dockerfile: Dockerfile
     ports: 
       - "8080:443"
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - inception
     secrets:
       - key
       - cert
-
-  wordpress:
-    container_name: wordpress
 
 networks:
   inception:
