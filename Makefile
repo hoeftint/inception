@@ -1,22 +1,26 @@
+DOCKER_COMPOSE = docker compose
+ENV_FILE = --env-file srcs/.env
+COMPOSE = -f ./srcs/docker-compose.yml
+COMPOSE_CMD = ${DOCKER_COMPOSE} ${COMPOSE} ${ENV_FILE}
 
-run:
-	docker compose -f ./srcs/docker-compose.yaml up -d
+all:
+	@${COMPOSE_CMD} build --no-cache
+
+up:
+	@${COMPOSE_CMD} up || true
+
+run: all up
 
 down:
-	docker compose -f ./srcs/docker-compose.yaml down
+	@${COMPOSE_CMD} down
 
-rm_network:
-	docker network prune -f
+clean: down
+	docker system prune -f
 
-rm_container:
-	docker container prune -f
+fclean:
+	@${COMPOSE_CMD} down -v
+	docker system prune -f --volumes
 
-rm_image:
-	docker image prune -f
+re:	fclean run
 
-rm_system:
-	docker system prune -af
-
-clean: down rm_image rm_container rm_network rm_system
-
-.PHONY: run down
+.PHONY: all up run down clean fclean re

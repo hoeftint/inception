@@ -1,5 +1,8 @@
 FROM debian:bullseye
 
-RUN apt-get update -y && apt-get install mariadb-server -y && \
+RUN apt-get update -y && apt-get install mariadb-server -y
 
-CMD ["/usr/bin/mysqld_safe"]
+COPY .tools/entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+
+CMD ["entrypoint.sh"]
