@@ -1,3 +1,5 @@
 #! /bin/bash
 
-exec mysqld_safe
+#mysql_secure_installation
+
+# exec mysqld_safe
