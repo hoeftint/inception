@@ -5,4 +5,4 @@ RUN apt-get update -y && apt-get install mariadb-server -y
 COPY .tools/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-CMD ["entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
