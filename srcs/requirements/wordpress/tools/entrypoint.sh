@@ -1,12 +1,24 @@
 #!/bin/bash
 trap "exit" TERM
 
-sleep 20
+echo "Waiting for MariaDB to be ready..."
+until mysqladmin ping -h"$MYSQL_HOSTNAME" --silent; do
+    echo "MariaDB is unavailable - waiting..."
+    sleep 2
+done
+
+echo "MariaDB is up - continuing with setup..."
+
+until mysql -h"$MYSQL_HOSTNAME" -u"$MYSQL_USER" -p"$(< /run/secrets/mysql_pw)" -e "SELECT 1;" &> /dev/null; do
+    echo "Waiting for MariaDB to grant privileges to user '$MYSQL_USER'..."
+    sleep 2
+done
 
 WP_PATH="/var/www/wordpress"
 
 cd /var/
 
+echo "wp config create......."
 wp config create --allow-root \
                 --dbname=$MYSQL_DATABASE \
 				--dbuser=$MYSQL_USER \
