@@ -5,14 +5,14 @@ services:
       context: requirements/nginx
       dockerfile: Dockerfile
     ports: 
-      - "8080:443"
+      - "443:443"
     restart: on-failure
     networks:
       - inception
     depends_on:
       - wordpress
     volumes:
-      - wordpress:/var/www/html
+      - wordpress:/var/www/wordpress
 
   wordpress:
     container_name: wordpress
@@ -23,13 +23,11 @@ services:
       context: requirements/wordpress
       dockerfile: Dockerfile
     env_file:
-      - ./.env
-    expose:
-      - "9000"
+      - .env
     depends_on:
       - mariadb
     volumes:
-      - wordpress:/var/www/html
+      - wordpress:/var/www/wordpress
     secrets:
       - mysql_root_pw
       - mysql_pw
@@ -47,7 +45,7 @@ services:
     expose:
       - "3306"
     env_file:
-      - ./.env
+      - .env
     volumes:
       - mariadb:/var/lib/mysql
     secrets:
@@ -62,14 +60,14 @@ networks:
 volumes:
   wordpress:
     driver: local
-    name: db
+    name: wordpress_db
     driver_opts:
       type: none
       o: bind
       device: /home/${USER}/data/wordpress_db
   mariadb:
     driver: local
-    name: db
+    name: mariadb_db
     driver_opts:
       type: none
       o: bind

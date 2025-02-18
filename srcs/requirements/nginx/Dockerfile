@@ -6,6 +6,7 @@ RUN apt update -y && \
 	apt install -y nginx tini
 
 RUN mkdir -p /etc/nginx/ssl && mkdir -p /var/www/html
+
 RUN apt install openssl -y
 
 RUN openssl req -x509 -nodes \
@@ -16,8 +17,9 @@ RUN openssl req -x509 -nodes \
 # Copy Nginx configuration file
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
-# Copy your website files
-COPY ./www/. /var/www/html/
+RUN chmod 755 /var/www/html
+
+RUN chown -R www-data:www-data /var/www/html
 
 # Expose HTTPS port
 EXPOSE 443
